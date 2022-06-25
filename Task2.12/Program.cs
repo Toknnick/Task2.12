@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace Task2._12
 {
@@ -10,33 +6,32 @@ namespace Task2._12
     {
         static void Main(string[] args)
         {
-            int firstSpell;
-            int healingSpell;
-            int secondSpell;
-            int thirdSpell;
-            int armorSpell;
-            int manaSpell;
+            int firstSpell = 0;
+            int secondSpell = 0;
+            int thirdSpell = 0;
+            int armorSpell = 0;
+            int manaSpell = 0;
             int spellCounter = 0;
             int countForSecondSpell = 1;
             int countForThirdSpell = 2;
             int spellNumber = 0;
-            int myHeal = 650;
-            int maxMyHeal = 650;
+            int heroHeal = 650;
+            int maxHeroHeal = 650;
             int mana = 1000;
             int minDamageFirstSpell = 100;
             int maxDamageFirstSpell = 150;
-            int minusManaFirstSpell = 200;
+            int priceFirstSpell = 200;
             int minHealByHealingSpell = 110;
             int maxHealByHealingSpell = 200;
-            int minusManaHealingsSpell = 30;
+            int priceManaHealingsSpell = 30;
             int minDamageBySecondSpell = 200;
             int maxDamageBySecondSpell = 250;
-            int minusManaBySecondSpell = 250;
+            int priceManaBySecondSpell = 250;
             int minDamageByThirdSpell = 250;
             int maxDamageByThirdSpell = 300;
-            int minusManaByThirdSpell = 270;
+            int priceManaByThirdSpell = 270;
             int maxHPByArmorSpell = 150;
-            int minusManaByArmorSpell = 120;
+            int priceManaByArmorSpell = 120;
             int minManaByManaSpell = 500;
             int maxManaByManaSpell = 750;
             int minDamageByBoss = 100;
@@ -44,44 +39,45 @@ namespace Task2._12
             int damageByBoss;
             int bossHeal = 1000;
             bool isSomeLive = true;
-            int HPForDeath = 0;
+            bool isUsedFirstSpell = false;
             Random random = new Random();
-            Console.WriteLine("1.Локтарг - шар тьмы : урон 100 - 150 единиц хп. Затраты маны 200 единиц." +
-                "\n2.Исцеляющая тьма : восполнение 110-200 eдиниц хп. Затраты маны 30 единиц. " +
-                "\n3.Темное пламя : урон 200 - 250 единиц хп. Затраты маны 250 единиц. (доступно после использования одного заклинания).  " +
-                "\n4.Темный приговор : урон 250 - 300 единиц хп. Затраты маны 270 единиц. (доступно после использования двух заклинаний). " +
-                "\n5.Щит тьмы : доп 150 единиц хп. Затраты маны 120 единиц." +
-                "\n6.Ритуал теней : восполняет от 500 до 750 единиц маны.");
+            firstSpell = random.Next(minDamageFirstSpell, maxDamageFirstSpell);
+            int percentDamageByFirstSpell = (int)Math.Round((double)(firstSpell * maxDamageFirstSpell / 100));
+            Console.WriteLine($"1.Локтарг - шар тьмы : урон {minDamageFirstSpell} - {maxDamageFirstSpell} единиц хп. Затраты маны {priceFirstSpell} единиц." +
+                $"\n2.Темное пламя : урон {minDamageBySecondSpell} - {maxDamageBySecondSpell} единиц хп. Затраты маны {priceManaBySecondSpell} единиц. (доступно после использования одного заклинания).  " +
+                $"\n3.Темный приговор : урон {minDamageByThirdSpell} - {maxDamageByThirdSpell} единиц хп. Затраты маны {priceManaByThirdSpell} единиц. (доступно после использования двух заклинаний). " +
+                $"\n4.Щит тьмы : доп {maxHPByArmorSpell} единиц хп. Затраты маны {priceManaByArmorSpell} единиц. После использования Локтарга увеличивает доп хп на {percentDamageByFirstSpell} %" +
+                $"\n5.Ритуал теней : восполняет от {minManaByManaSpell} до {maxManaByManaSpell} единиц маны.");
 
             while (isSomeLive)
             {
-                Console.WriteLine($"Твои жизни: {myHeal} и мана {mana} \nЖизни босса: {bossHeal}");
+                Console.WriteLine($"Твои жизни: {heroHeal} и мана {mana} \nЖизни босса: {bossHeal}");
 
-                if (myHeal <= HPForDeath)
+                if (heroHeal <= 0)
                 {
                     isSomeLive = false;
                     Console.WriteLine("Смерть пришла за тобой");
                 }
 
-                if (bossHeal <= HPForDeath)
+                if (bossHeal <= 0)
                 {
                     isSomeLive = false;
                     Console.WriteLine("Смерть сегодня обошла тебя стороной");
                 }
 
-                    Console.WriteLine("Выберите вариант");
-                    spellNumber = int.Parse(Console.ReadLine());
+                Console.WriteLine("Выберите вариант");
+                spellNumber = int.Parse(Console.ReadLine());
 
-                switch (spellNumber) 
+                switch (spellNumber)
                 {
                     case 1:
 
-                        if (mana >= minusManaFirstSpell)
+                        if (mana >= priceFirstSpell)
                         {
+                            isUsedFirstSpell = true;
                             spellCounter++;
-                            firstSpell = random.Next(minDamageFirstSpell, maxDamageFirstSpell);
                             bossHeal -= firstSpell;
-                            mana -= minusManaFirstSpell;
+                            mana -= priceFirstSpell;
                         }
                         else
                         {
@@ -90,61 +86,14 @@ namespace Task2._12
                         break;
                     case 2:
 
-                        if (myHeal != maxMyHeal)
+                        if (spellCounter >= countForSecondSpell)
                         {
 
-                            if (mana >= minusManaHealingsSpell)
-                            {
-                                spellCounter++; 
-                                healingSpell = random.Next(minHealByHealingSpell, maxHealByHealingSpell);
-                                myHeal += healingSpell;
-                                mana -= minusManaHealingsSpell;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Нужно больше маны");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("У тебя уже макс единиц хп");
-                            Console.WriteLine("Выберите вариант");
-                            spellNumber = int.Parse(Console.ReadLine());
-                        }
-                        break;
-                    case 3:
-
-                        if(spellCounter >= countForSecondSpell)
-                        {
-
-                            if (mana >= minusManaBySecondSpell)
+                            if (mana >= priceManaBySecondSpell)
                             {
                                 secondSpell = random.Next(minDamageBySecondSpell, maxDamageBySecondSpell);
                                 bossHeal -= secondSpell;
-                                mana -= minusManaBySecondSpell;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Нужно больше маны");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Я же сказал, ЗАКРЫТО!"); 
-                            Console.WriteLine("Выберите вариант");
-                            spellNumber = int.Parse(Console.ReadLine());
-                        }
-                        break;
-                    case 4:
-
-                        if (spellCounter >= countForThirdSpell)
-                        {
-
-                            if (mana >= minusManaByThirdSpell)
-                            {
-                                thirdSpell = random.Next(minDamageByThirdSpell, maxDamageByThirdSpell);
-                                bossHeal -= thirdSpell;
-                                mana -= minusManaByThirdSpell;
+                                mana -= priceManaBySecondSpell;
                             }
                             else
                             {
@@ -154,37 +103,66 @@ namespace Task2._12
                         else
                         {
                             Console.WriteLine("Я же сказал, ЗАКРЫТО!");
-                            Console.WriteLine("Выберите вариант");
-                            spellNumber = int.Parse(Console.ReadLine());
                         }
                         break;
-                    case 5:
+                    case 3:
 
-                        if(mana >= minusManaByArmorSpell)
+                        if (spellCounter >= countForThirdSpell)
+                        {
+
+                            if (mana >= priceManaByThirdSpell)
+                            {
+                                thirdSpell = random.Next(minDamageByThirdSpell, maxDamageByThirdSpell);
+                                bossHeal -= thirdSpell;
+                                mana -= priceManaByThirdSpell;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Нужно больше маны");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Я же сказал, ЗАКРЫТО!");
+                        }
+                        break;
+                    case 4:
+
+                        if (mana >= priceManaByArmorSpell)
                         {
                             spellCounter++;
-                            armorSpell = random.Next(maxHPByArmorSpell,maxHPByArmorSpell);
-                            myHeal += armorSpell;
-                            mana -= minusManaByArmorSpell;
+                            armorSpell = random.Next(maxHPByArmorSpell, maxHPByArmorSpell);
+
+                            if(isUsedFirstSpell == true)
+                            {
+                                armorSpell += percentDamageByFirstSpell;
+                                heroHeal += armorSpell;
+                                mana -= priceManaByArmorSpell;
+                                isUsedFirstSpell = false;
+                            }
+                            else
+                            {
+                                heroHeal += armorSpell;
+                                mana -= priceManaByArmorSpell;
+                            }
                         }
                         else
                         {
                             Console.WriteLine("Нужно больше маны");
                         }
                         break;
-                    case 6:
+                    case 5:
                         manaSpell = random.Next(minManaByManaSpell, maxManaByManaSpell);
                         mana += manaSpell;
                         break;
                     default:
                         Console.WriteLine("Я же сказал, ЗАКРЫТО!");
-                        Console.WriteLine("Выберите вариант");
-                        spellNumber = int.Parse(Console.ReadLine());
                         break;
                 }
                 damageByBoss = random.Next(minDamageByBoss, maxDamageByBoss);
-                myHeal -= damageByBoss;
+                heroHeal -= damageByBoss;
             }
         }
     }
 }
+
